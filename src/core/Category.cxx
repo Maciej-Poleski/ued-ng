@@ -28,10 +28,7 @@ const std::vector< boost::shared_ptr< Subject > > Category::subjects() const
 
 void Category::setName(const std::string& name)
 {
-    if(_name==name)
-        return;
     _name=name;
-    _nameChanged(_name);
 }
 
 void Category::setSubjectSource(boost::shared_ptr< SubjectSource > subjectSource)
@@ -46,7 +43,6 @@ void Category::setSubjectSource(boost::shared_ptr< SubjectSource > subjectSource
     _subjectSource=subjectSource;
     if(subjectSource)
         subjectSource->addCategory(shared_from_this());
-    _subjectSourceChanged(subjectSource);
 }
 
 void Category::addSubject(boost::shared_ptr< Subject > subject)

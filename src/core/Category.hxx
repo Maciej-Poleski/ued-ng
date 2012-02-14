@@ -10,8 +10,6 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
-#include <boost/signals2/signal.hpp>
-
 class Group;
 class Subject;
 class SubjectSource;
@@ -46,13 +44,6 @@ private:
     boost::weak_ptr<SubjectSource> _subjectSource;
     std::vector<boost::weak_ptr<Subject>> _subjects;
     std::vector<boost::shared_ptr<Group>> _groups;
-
-    boost::signals2::signal<void (boost::shared_ptr<Group>)> _groupAdded;
-    boost::signals2::signal<void (boost::shared_ptr<Group>)> _groupRemoved;
-    boost::signals2::signal<void (boost::shared_ptr<Subject>)> _subjectAdded;
-    boost::signals2::signal<void (boost::shared_ptr<Subject>)> _subjectRemoved;
-    boost::signals2::signal<void (const std::string &)> _nameChanged;
-    boost::signals2::signal<void (boost::shared_ptr<SubjectSource>)> _subjectSourceChanged;
 };
 
 inline const std::string Category::name() const
@@ -71,3 +62,5 @@ inline const std::vector<boost::shared_ptr<Group>> Category::groups() const
 }
 
 #endif // CATEGORY_HXX
+
+
