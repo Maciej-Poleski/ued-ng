@@ -5,6 +5,6 @@ if(${Boost_FOUND})
     include_directories(${Boost_INCLUDE_DIRS})
     add_definitions(-DBOOST_TEST_DYN_LINK)
 
-    add_subdirectory(core)
+    add_subdirectory(Core)
 
 endif(${Boost_FOUND})

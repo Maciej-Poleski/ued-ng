@@ -1,94 +1,57 @@
 #include <iostream>
-#include <memory>
 #include <fstream>
 #include <string>
-
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/shared_ptr.hpp>
-#include <boost/serialization/weak_ptr.hpp>
 
-class B;
+#include <Core/TeacherManager.hxx>
 
-class A : public boost::enable_shared_from_this<A>
-{
-    friend class boost::serialization::access;
-public:
-    A()
-    {
-        std::cout<<"Konstruktor A\n";
-    }
-    ~A()
-    {
-        std::cout<<"Destruktor A\n";
-    }
+#include <TextUI/TeacherManager.hxx>
 
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version);
-
-    boost::shared_ptr<B> _b;
-    std::string _comment;
-};
-
-class B : public boost::enable_shared_from_this<B>
-{
-    friend class boost::serialization::access;
-public:
-    B()
-    {
-        std::cout<<"Konstruktor B\n";
-    }
-    ~B()
-    {
-        std::cout<<"Destruktor B\n";
-    }
-
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version);
-
-    boost::weak_ptr<A> _a;
-    std::string _comment;
-};
-
-template<class Archive>
-inline void A::serialize(Archive& ar, const unsigned int version)
-{
-    ar & _b & _comment;
-}
-
-template<class Archive>
-inline void B::serialize(Archive& ar, const unsigned int version)
-{
-    ar & _a & _comment;
-}
-
+using namespace std;
 
 int main(int argc,char**argv)
 {
-    boost::shared_ptr<A> a;
-    boost::shared_ptr<B> b;
-    std::ifstream in("/tmp/t");
+    cout<<"Wersja rozwojowa\n"
+        <<"Nie wszystkie menadżery posiadają API/UI\n";
+    boost::shared_ptr<Core::TeacherManager> teacherManager;
     {
-        boost::archive::text_iarchive ia(in);
-        ia>>a>>b;
+        ifstream in("/home/evil/ued2.txt");
+        if(in.fail())
+            teacherManager.reset(new Core::TeacherManager);
+        else
+        {
+            boost::archive::text_iarchive ia(in);
+            ia>>teacherManager;
+        }
     }
-    std::cout<<a->_comment<<' '<<b->_comment<<'\n';
-    std::cout<<a->_b->_comment<<' '<<b->_a.lock()->_comment<<'\n';
-    a.reset(new A);
-    b.reset(new B);
-    a->_b=b;
-    b->_a=a;
-    a->_comment="Komentarz a";
-    b->_comment="Komentarz b";
-    std::ofstream out("/tmp/t");
+    for(;;)
     {
+        cout<<"Wybierz menadżer do oddelegowania kontroli\n"
+            <<" 1 - Menadżer nauczycieli\n"
+            <<" 0 - Koniec\n";
+        int c;
+        cin>>c;
+        if(c==0)
+        {
+            break;
+        }
+        else if(c==1)
+        {
+            TextUI::TeacherManager(teacherManager).userTime();
+        }
+        else
+        {
+            cout<<"Niepoprawny wybór >>"<<c<<"<<\n";
+            continue;
+        }
+    }
+    {
+        ofstream out("/home/evil/ued2.txt");
         boost::archive::text_oarchive oa(out);
-        oa<<a<<b;
+        oa<<teacherManager;
     }
-    std::cout<<u8"Witaj Świecie!\n";
     return 0;
 }
