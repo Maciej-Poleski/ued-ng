@@ -7,6 +7,10 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+
+#include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/access.hpp>
+
 namespace Core
 {
 
@@ -20,7 +24,7 @@ class Schedule;
  **/
 class ScheduleSource : public boost::enable_shared_from_this<ScheduleSource>
 {
-
+    friend class boost::serialization::access;
 public:
     explicit ScheduleSource();
 
@@ -34,6 +38,9 @@ public:
     void removeSchedule(boost::shared_ptr< Schedule > schedule);
 
 private:
+    template<class Archive>
+    void serialize(Archive &ar, unsigned int version);
+
     std::vector<boost::shared_ptr<SubjectSource>> _subjectsSources;
     std::vector<boost::shared_ptr<Schedule>> _schedules;
 };
@@ -47,6 +54,13 @@ inline const std::vector< boost::shared_ptr< Schedule > > ScheduleSource::schedu
 {
     return _schedules;
 }
+
+template<class Archive>
+void ScheduleSource::serialize(Archive& ar, unsigned int version)
+{
+    ar & _subjectsSources & _schedules;
+}
+
 
 }
 
