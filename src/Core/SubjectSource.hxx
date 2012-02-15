@@ -9,6 +9,12 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+
+#include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/weak_ptr.hpp>
+#include <boost/serialization/access.hpp>
+
 namespace Core
 {
 
@@ -22,6 +28,7 @@ class Category;
  **/
 class SubjectSource : public boost::enable_shared_from_this<SubjectSource>
 {
+    friend class boost::serialization::access;
 public:
     explicit SubjectSource();
     explicit SubjectSource(const std::string &name);
@@ -44,6 +51,9 @@ public:
     void removeSubject(boost::shared_ptr< Subject > subject);
 
 private:
+    template<class Archive>
+    void serialize(Archive & ar, unsigned int version);
+
     std::string _name;
     std::vector<boost::shared_ptr<Group>> _groups;
     std::vector<boost::shared_ptr<Category>> _categories;
@@ -80,6 +90,13 @@ inline void SubjectSource::setName(const std::string& name)
 {
     _name=name;
 }
+
+template<class Archive>
+void SubjectSource::serialize(Archive& ar, const unsigned int /*version*/)
+{
+    ar & _name & _groups & _categories & _subjects & _scheduleSource;
+}
+
 
 }
 

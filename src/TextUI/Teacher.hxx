@@ -31,6 +31,7 @@ public:
     void removeGroup();
 
     void constructNew();
+    void userTime();
 
 private:
     boost::shared_ptr<Core::Teacher> _teacher;

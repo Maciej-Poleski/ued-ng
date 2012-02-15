@@ -4,6 +4,7 @@
 
 #include "SubjectSource.hxx"
 #include "Schedule.hxx"
+
 namespace Core
 {
 

@@ -6,12 +6,12 @@
 namespace Core
 {
 
-HoursOfTheDay::HoursOfTheDay() : from_(0), to_(0)
+HoursOfTheDay::HoursOfTheDay() : _from(0), _to(0)
 {
 
 }
 
-HoursOfTheDay::HoursOfTheDay(uint8_t from, uint8_t to) : from_(from), to_(to)
+HoursOfTheDay::HoursOfTheDay(uint8_t from, uint8_t to) : _from(from), _to(to)
 {
     assert(from<=to);
     assert(to<=23);

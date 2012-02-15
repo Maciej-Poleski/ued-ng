@@ -7,9 +7,9 @@
 namespace Core
 {
 
-DayOfTheWeek::DayOfTheWeek() : day_(0) {}
+DayOfTheWeek::DayOfTheWeek() : _day(0) {}
 
-DayOfTheWeek::DayOfTheWeek(uint8_t day) : day_(day) {
+DayOfTheWeek::DayOfTheWeek(uint8_t day) : _day(day) {
     assert(day<=7);
     assert(day>0);
 }

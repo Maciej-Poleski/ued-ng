@@ -9,6 +9,13 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/weak_ptr.hpp>
+
 namespace Core
 {
 
@@ -23,6 +30,7 @@ class SubjectSource;
  **/
 class Category : public boost::enable_shared_from_this<Category>
 {
+    friend class boost::serialization::access;
 public:
     explicit Category();
     explicit Category(const std::string & categoryName);
@@ -42,6 +50,9 @@ public:
     void removeGroup(boost::shared_ptr<Group> group);
 
 private:
+    template<class Archive>
+    void serialize(Archive &ar, unsigned int version);
+
     std::string _name;
     boost::weak_ptr<SubjectSource> _subjectSource;
     std::vector<boost::weak_ptr<Subject>> _subjects;
@@ -62,6 +73,13 @@ inline const std::vector<boost::shared_ptr<Group>> Category::groups() const
 {
     return _groups;
 }
+
+template<class Archive>
+void Category::serialize(Archive& ar, const unsigned int /*version*/)
+{
+    ar & _name & _subjectSource & _subjects & _groups;
+}
+
 }
 #endif // CATEGORY_HXX
 

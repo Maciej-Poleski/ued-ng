@@ -14,8 +14,8 @@
 namespace Core
 {
 
-class SubjectSource;
-class Schedule;
+    class SubjectSource;
+    class Schedule;
 
 /**
  * @brief Żródło planu lekcji - zbiór źródeł przedmiotów

@@ -11,7 +11,15 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
-#include <boost/date_time/gregorian/gregorian_types.hpp>
+#include <boost/date_time/gregorian/gregorian.hpp>
+#include <boost/date_time/gregorian/greg_serialize.hpp>
+
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/string.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/weak_ptr.hpp>
+#include <boost/serialization/utility.hpp>
 
 #include "DayOfTheWeek.hxx"
 #include "HoursOfTheDay.hxx"
@@ -31,6 +39,7 @@ class Category;
  **/
 class Group : public boost::enable_shared_from_this<Group>
 {
+    friend class boost::serialization::access;
 public:
     explicit Group();
     explicit Group(const std::string &name);
@@ -53,6 +62,13 @@ public:
     void removeTerm(DayOfTheWeek DayOfTheWeek, HoursOfTheDay HoursOfTheDay);
 
 private:
+    template<class Archive>
+    void load(Archive &ar, unsigned int version);
+    template<class Archive>
+    void save(Archive &ar, unsigned int version) const;
+
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
+
     std::string _name;
     boost::shared_ptr<Teacher> _teacher;
     boost::weak_ptr<Category> _category;
@@ -104,6 +120,28 @@ inline void Group::setName(const std::string& name)
 inline void Group::setPeriod(const boost::gregorian::date_period& period)
 {
     _period=period;
+}
+
+namespace detail
+{
+    template<class archive_type, class temporal_type>
+    void save_to(archive_type& ar, const temporal_type& tt)
+    {
+        ar << tt;
+    }
+}
+
+template<class Archive>
+void Group::load(Archive& ar, const unsigned int /*version*/)
+{
+    ar & _name & _teacher & _category & _terms & _markCategories & _period;
+}
+
+template<class Archive>
+void Group::save(Archive& ar, const unsigned int /*version*/) const
+{
+    ar & _name & _teacher & _category & _terms & _markCategories;
+    detail::save_to(ar,_period);
 }
 
 }

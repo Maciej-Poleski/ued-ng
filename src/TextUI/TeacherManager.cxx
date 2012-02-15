@@ -63,6 +63,7 @@ void TextUI::TeacherManager::userTime()
         cout<<" 1 - Dodaj nauczyciela\n"
             <<" 2 - Usuń nauczyciela\n"
             <<" 3 - Wyświetl listę nauczycieli\n"
+            <<" 4 - Modyfikuj nauczyciela\n"
             <<" 0 - Powrót do menu głównego\n";
         int c;
         cin>>c;
@@ -77,6 +78,22 @@ void TextUI::TeacherManager::userTime()
             else if(c==3)
             {
                 printTeacherList();
+            }
+            else if(c==4)
+            {
+                cout<<"Podaj id nauczyciela (0 - Anuluj)\n";
+                int c;
+                cin>>c;
+                if(c==0)
+                {
+                    cout<<" Anulowano\n";
+                }
+                else
+                {
+                    TextUI::Teacher(
+                        _teacherManager->teachers().at(c-1)
+                    ).userTime();
+                }
             }
             else
             {
