@@ -3,7 +3,7 @@ find_package(Boost 1.47.0 REQUIRED date_time )
 
 include_directories(${Boost_INCLUDE_DIRS})
 
-add_library(TextUI ScheduleSourceManager.cxx Schedule.cxx SubjectSource.cxx ScheduleSource.cxx TeacherManager.cxx Teacher.cxx)
+add_library(TextUI HandleManager.cxx ScheduleSourceManager.cxx Schedule.cxx SubjectSource.cxx ScheduleSource.cxx TeacherManager.cxx Teacher.cxx)
 
 set_target_properties(TextUI PROPERTIES COMPILE_FLAGS "-std=c++0x")
 
